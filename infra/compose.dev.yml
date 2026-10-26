@@ -1,0 +1,22 @@
+name: oasfuse-dev
+
+services:
+  api:
+    build:
+      context: ../backend
+      dockerfile: api/Dockerfile
+    environment:
+      QUARKUS_HTTP_HOST: 0.0.0.0
+    ports:
+      - "127.0.0.1:8080:8080"
+
+  web:
+    build:
+      context: ../frontend
+    environment:
+      INTERNAL_API_URL: http://api:8080
+    depends_on:
+      api:
+        condition: service_started
+    ports:
+      - "127.0.0.1:3200:3000"
