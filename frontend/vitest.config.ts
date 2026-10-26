@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   test: {
     environment: "jsdom",
-    exclude: ["e2e/**", "node_modules/**", ".next/**"],
+    exclude: ["node_modules/**", ".next/**"],
     setupFiles: ["./src/test/setup.ts"],
   },
   resolve: { alias: { "@": path.resolve(__dirname, "./src") } },

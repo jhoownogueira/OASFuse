@@ -100,7 +100,7 @@ select {
   width: 26px;
   height: 31px;
 }
-.open-source,
+.project-type,
 .eyebrow,
 .kicker {
   font-family: var(--font-mono), monospace;
@@ -440,7 +440,7 @@ select {
   .header-inner {
     width: min(100% - 32px, 1310px);
   }
-  .open-source {
+  .project-type {
     display: none;
   }
   .site-header nav {

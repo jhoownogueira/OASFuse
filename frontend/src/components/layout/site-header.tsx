@@ -18,7 +18,7 @@ export function SiteHeader() {
         <div className="header-inner">
           <div className="header-brand">
             <Logo />
-            <span className="open-source">{t.openSource}</span>
+            <span className="project-type">{t.projectType}</span>
           </div>
           <nav aria-label={t.primaryNavigation}>
             <Link href="/compare">{t.compare}</Link>
