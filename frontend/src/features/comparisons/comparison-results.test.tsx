@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { expect, it } from "vitest";
 import { ComparisonResults } from "./comparison-results";
 import type { ComparisonReport } from "./types";
+import { I18nProvider } from "@/i18n/provider";
 
 const report: ComparisonReport = {
   status: "completed",
@@ -52,7 +53,11 @@ const report: ComparisonReport = {
 
 it("filters findings using the real report fields", async () => {
   const user = userEvent.setup();
-  render(<ComparisonResults report={report} onNew={() => undefined} />);
+  render(
+    <I18nProvider>
+      <ComparisonResults report={report} onNew={() => undefined} />
+    </I18nProvider>,
+  );
   expect(screen.getByText("Operation removed")).toBeInTheDocument();
   await user.type(screen.getByPlaceholderText(/Search findings/), "health");
   expect(screen.queryByText("Operation removed")).not.toBeInTheDocument();

@@ -10,6 +10,7 @@ OASFuse is a deterministic, stateless OpenAPI 3 comparison engine for release ga
 - Breaking, review, and informational severities with category filters.
 - Dark developer-focused interface based on the supplied design references.
 - Markdown, JSON, and text output for reviews and automation.
+- Interface localization for Brazilian Portuguese, English, and Spanish.
 
 ## Repository layout
 

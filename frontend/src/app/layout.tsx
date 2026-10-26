@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/layout/site-header";
+import { I18nProvider } from "@/i18n/provider";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 const mono = JetBrains_Mono({ variable: "--font-mono", subsets: ["latin"] });
@@ -21,14 +22,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en-US" className="dark">
       <body className={`${inter.variable} ${mono.variable}`}>
-        <a className="skip-link" href="#main-content">
-          Skip to content
-        </a>
-        <SiteHeader />
-        {children}
+        <I18nProvider>
+          <LocalizedShell>{children}</LocalizedShell>
+        </I18nProvider>
       </body>
     </html>
+  );
+}
+
+function LocalizedShell({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <SiteHeader />
+      {children}
+    </>
   );
 }

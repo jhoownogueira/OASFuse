@@ -6,8 +6,11 @@ import { baselineExample, candidateExample } from "./examples";
 import { useCompareSpecifications } from "./use-compare-specifications";
 import { SpecificationEditor } from "./specification-editor";
 import { ComparisonResults } from "./comparison-results";
+import { useI18n } from "@/i18n/provider";
 
 export function ComparisonWorkspace() {
+  const { messages } = useI18n();
+  const t = messages.workspace;
   const [baseline, setBaseline] = useState(baselineExample);
   const [candidate, setCandidate] = useState(candidateExample);
   const [baselineName, setBaselineName] = useState("users-v1.yaml");
@@ -32,10 +35,7 @@ export function ComparisonWorkspace() {
     }
   };
   const submit = () => {
-    if (!baseline.trim() || !candidate.trim())
-      return setLocalError(
-        "Add both a baseline and a candidate specification.",
-      );
+    if (!baseline.trim() || !candidate.trim()) return setLocalError(t.missing);
     compare({
       baseline: { fileName: baselineName, content: baseline },
       candidate: { fileName: candidateName, content: candidate },
@@ -52,14 +52,11 @@ export function ComparisonWorkspace() {
     <main id="main-content" className="compare-shell">
       <div className="workspace-heading">
         <div>
-          <span className="kicker">WORKSPACE / NEW COMPARISON</span>
-          <h1>Every release starts with a comparison.</h1>
-          <p>
-            Add your current contract and the proposed version. We&apos;ll
-            surface the changes that matter.
-          </p>
+          <span className="kicker">{t.kicker}</span>
+          <h1>{t.title}</h1>
+          <p>{t.subtitle}</p>
           <div className="example-line">
-            <span className="tag">Example</span> Users API &nbsp;{" "}
+            <span className="tag">{t.example}</span> Users API &nbsp;{" "}
             <span className="mono">1.0.0 → 1.1.0</span>
           </div>
         </div>
@@ -71,7 +68,7 @@ export function ComparisonWorkspace() {
               change("candidate", candidateExample, "users-v1.1.yaml");
             }}
           >
-            <FileJson size={16} /> Load example
+            <FileJson size={16} /> {t.loadExample}
           </button>
           <button
             className="button"
@@ -82,7 +79,7 @@ export function ComparisonWorkspace() {
               change("candidate", bv, bn);
             }}
           >
-            <RefreshCw size={16} /> Swap specifications
+            <RefreshCw size={16} /> {t.swap}
           </button>
         </div>
       </div>
@@ -93,7 +90,7 @@ export function ComparisonWorkspace() {
       )}
       <div className="editors-grid">
         <SpecificationEditor
-          label="Baseline"
+          label={t.baseline}
           fileName={baselineName}
           version="1.0.0"
           value={baseline}
@@ -101,7 +98,7 @@ export function ComparisonWorkspace() {
           onError={setLocalError}
         />
         <SpecificationEditor
-          label="Candidate"
+          label={t.candidate}
           fileName={candidateName}
           version="1.1.0"
           value={candidate}
@@ -111,15 +108,14 @@ export function ComparisonWorkspace() {
       </div>
       <div className="compare-footer">
         <span>
-          <ShieldCheck size={17} /> Designed for stateless comparison. Review
-          our security principles.
+          <ShieldCheck size={17} /> {t.privacy}
         </span>
         <button
           className="button button-primary"
           disabled={isLoading}
           onClick={submit}
         >
-          {isLoading ? "Comparing specifications…" : "Compare Specifications"}
+          {isLoading ? t.comparing : t.compare}
           <ArrowRight size={17} />
         </button>
       </div>

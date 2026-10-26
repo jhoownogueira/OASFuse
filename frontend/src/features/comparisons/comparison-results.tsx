@@ -3,12 +3,8 @@
 import { useMemo, useState } from "react";
 import { ChevronDown, ChevronRight, Download, Search } from "lucide-react";
 import type { ComparisonReport, Finding, Severity } from "./types";
-
-const severityName: Record<Severity, string> = {
-  breaking: "Breaking",
-  "non-breaking": "Non-breaking",
-  review: "Needs review",
-};
+import { useI18n } from "@/i18n/provider";
+import type { Messages } from "@/i18n/messages";
 const severityClass: Record<Severity, string> = {
   breaking: "badge-breaking",
   "non-breaking": "badge-safe",
@@ -23,17 +19,17 @@ function download(content: string, name: string, type: string) {
   a.click();
   URL.revokeObjectURL(url);
 }
-function markdown(report: ComparisonReport) {
+function markdown(report: ComparisonReport, t: Messages["results"]) {
   return [
-    `# OASFuse comparison report`,
+    `# ${t.markdownTitle}`,
     ``,
-    `Total findings: ${report.summary.total}`,
+    `${t.totalFindings}: ${report.summary.total}`,
     ``,
     ...report.findings.flatMap((f) => [
       `## ${f.title}`,
-      `- Severity: ${f.severity}`,
-      `- Rule: ${f.ruleId}`,
-      `- Location: ${f.location}`,
+      `- ${t.severity}: ${f.severity}`,
+      `- ${t.rule}: ${f.ruleId}`,
+      `- ${t.location}: ${f.location}`,
       ``,
       f.message,
       ``,
@@ -50,6 +46,13 @@ export function ComparisonResults({
   report: ComparisonReport;
   onNew(): void;
 }) {
+  const { messages } = useI18n();
+  const t = messages.results;
+  const severityName: Record<Severity, string> = {
+    breaking: t.severities.breaking,
+    "non-breaking": t.severities.nonBreaking,
+    review: t.severities.review,
+  };
   const [query, setQuery] = useState("");
   const [severity, setSeverity] = useState<"all" | Severity>("all");
   const [open, setOpen] = useState<string | undefined>(report.findings[0]?.id);
@@ -69,12 +72,12 @@ export function ComparisonResults({
       <div className="results-title">
         <div>
           <span className="mono back" onClick={onNew}>
-            ← Back to workspace
+            {t.back}
           </span>
-          <h1>Comparison results</h1>
+          <h1>{t.title}</h1>
           <p>
             Users API &nbsp; <span className="mono">1.0.0 → 1.1.0</span> &nbsp;{" "}
-            <span className="complete">COMPLETE</span>
+            <span className="complete">{t.complete}</span>
           </p>
         </div>
         <div className="results-actions">
@@ -94,14 +97,18 @@ export function ComparisonResults({
           <button
             className="button"
             onClick={() =>
-              download(markdown(report), "oasfuse-report.md", "text/markdown")
+              download(
+                markdown(report, t),
+                "oasfuse-report.md",
+                "text/markdown",
+              )
             }
           >
             <Download size={15} />
             Markdown
           </button>
           <button className="button" onClick={onNew}>
-            New comparison
+            {t.newComparison}
           </button>
         </div>
       </div>
@@ -112,10 +119,10 @@ export function ComparisonResults({
             <strong>{report.summary.countsBySeverity[s]}</strong>
             <p>
               {s === "breaking"
-                ? "Existing consumers may be affected"
+                ? t.severityHelp.breaking
                 : s === "non-breaking"
-                  ? "Additive changes to your contract"
-                  : "Impact depends on your workflow"}
+                  ? t.severityHelp.nonBreaking
+                  : t.severityHelp.review}
             </p>
           </article>
         ))}
@@ -123,32 +130,34 @@ export function ComparisonResults({
       <div className="filter-row">
         <label>
           <Search size={17} />
-          <span className="sr-only">Search findings</span>
+          <span className="sr-only">{t.search}</span>
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search findings or schema paths…"
+            placeholder={t.searchPlaceholder}
           />
         </label>
         <select
-          aria-label="Filter by severity"
+          aria-label={t.filter}
           value={severity}
           onChange={(e) => setSeverity(e.target.value as "all" | Severity)}
         >
-          <option value="all">All severities</option>
-          <option value="breaking">Breaking</option>
-          <option value="non-breaking">Non-breaking</option>
-          <option value="review">Needs review</option>
+          <option value="all">{t.all}</option>
+          <option value="breaking">{t.severities.breaking}</option>
+          <option value="non-breaking">{t.severities.nonBreaking}</option>
+          <option value="review">{t.severities.review}</option>
         </select>
         <span>
-          Showing {filtered.length} of {report.findings.length} changes
+          {t.showing
+            .replace("{shown}", String(filtered.length))
+            .replace("{total}", String(report.findings.length))}
         </span>
       </div>
       <div className="finding-list">
         {filtered.length === 0 ? (
           <div className="empty">
-            <h2>No findings match your filters.</h2>
-            <p>Try another schema path or clear your filters.</p>
+            <h2>{t.emptyTitle}</h2>
+            <p>{t.emptyCopy}</p>
             <button
               className="button"
               onClick={() => {
@@ -156,7 +165,7 @@ export function ComparisonResults({
                 setSeverity("all");
               }}
             >
-              Clear filters
+              {t.clear}
             </button>
           </div>
         ) : (
@@ -166,6 +175,8 @@ export function ComparisonResults({
               finding={f}
               expanded={open === f.id}
               toggle={() => setOpen(open === f.id ? undefined : f.id)}
+              labels={t}
+              severityName={severityName}
             />
           ))
         )}
@@ -178,11 +189,21 @@ function FindingRow({
   finding,
   expanded,
   toggle,
+  labels,
+  severityName,
 }: {
   finding: Finding;
   expanded: boolean;
   toggle(): void;
+  labels: Messages["results"];
+  severityName: Record<Severity, string>;
 }) {
+  const translatedTitles: Record<string, string> = {
+    "operation.added": labels.findingTitles.operationAdded,
+    "operation.id_changed": labels.findingTitles.operationIdChanged,
+    "response.property.removed": labels.findingTitles.responsePropertyRemoved,
+    "response.type.changed": labels.findingTitles.responseTypeChanged,
+  };
   return (
     <article className="finding">
       <button
@@ -192,7 +213,7 @@ function FindingRow({
       >
         {expanded ? <ChevronDown size={17} /> : <ChevronRight size={17} />}
         <span>
-          <strong>{finding.title}</strong>
+          <strong>{translatedTitles[finding.ruleId] ?? finding.title}</strong>
           <span className={`badge ${severityClass[finding.severity]}`}>
             {severityName[finding.severity]}
           </span>
@@ -211,12 +232,14 @@ function FindingRow({
           <div className="finding-meta">{finding.location}</div>
           <div className="finding-diff">
             <pre className="code-remove">
-              BASELINE{"\n"}
-              {finding.before ?? "present"}
+              {labels.baseline}
+              {"\n"}
+              {finding.before ?? labels.present}
             </pre>
             <pre className="code-add">
-              CANDIDATE{"\n"}
-              {finding.after ?? "absent"}
+              {labels.candidate}
+              {"\n"}
+              {finding.after ?? labels.absent}
             </pre>
           </div>
           <div className="rationale">💡 {finding.rationale}</div>

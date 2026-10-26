@@ -120,6 +120,21 @@ select {
 .site-header nav a:hover {
   color: var(--text);
 }
+.language-select select {
+  min-height: 34px;
+  padding: 0 28px 0 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  cursor: pointer;
+}
+.language-select select:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
 .button {
   min-height: 44px;
   padding: 0 18px;

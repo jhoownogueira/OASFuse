@@ -3,11 +3,17 @@
 import dynamic from "next/dynamic";
 import { ChangeEvent, DragEvent, useRef } from "react";
 import { FileCode2, Upload } from "lucide-react";
+import { useI18n } from "@/i18n/provider";
 
 const MonacoEditor = dynamic(() => import("@monaco-editor/react"), {
   ssr: false,
-  loading: () => <div className="editor-loading">Loading editor…</div>,
+  loading: () => <EditorLoading />,
 });
+
+function EditorLoading() {
+  const { messages } = useI18n();
+  return <div className="editor-loading">{messages.editor.loading}</div>;
+}
 const MAX_FILE_BYTES = 2 * 1024 * 1024;
 
 interface Props {
@@ -27,13 +33,13 @@ export function SpecificationEditor({
   onChange,
   onError,
 }: Props) {
+  const { messages } = useI18n();
+  const t = messages.editor;
   const inputRef = useRef<HTMLInputElement>(null);
   async function readFile(file?: File) {
     if (!file) return;
-    if (!/\.(ya?ml|json)$/i.test(file.name))
-      return onError("Choose a .yaml, .yml, or .json file.");
-    if (file.size > MAX_FILE_BYTES)
-      return onError("Each specification must be 2 MiB or smaller.");
+    if (!/\.(ya?ml|json)$/i.test(file.name)) return onError(t.chooseFile);
+    if (file.size > MAX_FILE_BYTES) return onError(t.size);
     onChange(await file.text(), file.name);
   }
   const upload = (event: ChangeEvent<HTMLInputElement>) =>
@@ -51,7 +57,7 @@ export function SpecificationEditor({
       className="editor-card"
       onDragOver={(e) => e.preventDefault()}
       onDrop={drop}
-      aria-label={`${label} specification`}
+      aria-label={`${label} ${t.specification}`}
     >
       <div className="editor-header">
         <div>
@@ -64,7 +70,7 @@ export function SpecificationEditor({
       <div className="editor-file">
         <span>{fileName}</span>
         <button type="button" onClick={() => inputRef.current?.click()}>
-          Upload file
+          {t.upload}
         </button>
         <input
           ref={inputRef}
@@ -92,7 +98,7 @@ export function SpecificationEditor({
             tabSize: 2,
             automaticLayout: true,
             wordWrap: "on",
-            ariaLabel: `${label} OpenAPI editor`,
+            ariaLabel: `${label} ${t.openApiEditor}`,
           }}
         />
       </div>
@@ -101,11 +107,13 @@ export function SpecificationEditor({
         type="button"
         onClick={() => inputRef.current?.click()}
       >
-        <Upload size={15} /> Drop a .yaml or .json file anywhere in this editor
+        <Upload size={15} /> {t.drop}
       </button>
       <div className="editor-status">
-        <span>✓ Ready for validation</span>
-        <span>UTF-8 &nbsp;·&nbsp; {value.split("\n").length} lines</span>
+        <span>{t.ready}</span>
+        <span>
+          UTF-8 &nbsp;·&nbsp; {value.split("\n").length} {t.lines}
+        </span>
       </div>
     </section>
   );
