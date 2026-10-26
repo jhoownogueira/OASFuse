@@ -1,0 +1,16 @@
+node_modules/
+.next/
+coverage/
+playwright-report/
+test-results/
+target/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+.env
+.env.local
+!.env.example
+tmp/
+*.log
+
