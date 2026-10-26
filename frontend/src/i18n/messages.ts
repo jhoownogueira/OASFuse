@@ -8,7 +8,7 @@ const enUS = {
     primaryNavigation: "Primary navigation",
     compare: "Compare",
     docs: "Docs",
-    openSource: "OPEN SOURCE",
+    projectType: "PORTFOLIO PROJECT",
     language: "Language",
   },
   home: {
@@ -248,7 +248,7 @@ const ptBR: Messages = {
     primaryNavigation: "Navegação principal",
     compare: "Comparar",
     docs: "Documentação",
-    openSource: "CÓDIGO ABERTO",
+    projectType: "PROJETO DE PORTFÓLIO",
     language: "Idioma",
   },
   home: {
@@ -484,7 +484,7 @@ const esES: Messages = {
     primaryNavigation: "Navegación principal",
     compare: "Comparar",
     docs: "Documentación",
-    openSource: "CÓDIGO ABIERTO",
+    projectType: "PROYECTO DE PORTAFOLIO",
     language: "Idioma",
   },
   home: {

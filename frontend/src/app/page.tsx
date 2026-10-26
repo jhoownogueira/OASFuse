@@ -23,7 +23,7 @@ export default function HomePage() {
       <section className="hero">
         <div className="container">
           <div className="intro">
-            <span className="tag">{messages.common.openSource}</span>
+            <span className="tag">{messages.common.projectType}</span>
             <span>{t.intro}</span>
           </div>
           <h1>{t.title}</h1>
@@ -186,7 +186,7 @@ export default function HomePage() {
           <span>
             <Link href="/docs">{t.documentation}</Link> &nbsp;&nbsp;{" "}
             <Braces size={14} style={{ display: "inline" }} />{" "}
-            {messages.common.openSource}
+            {messages.common.projectType}
           </span>
         </div>
       </footer>

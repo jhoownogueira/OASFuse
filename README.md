@@ -2,6 +2,8 @@
 
 OASFuse is a deterministic, stateless OpenAPI 3 comparison engine for release gates and human review. It compares a baseline contract with a candidate contract, classifies compatibility findings, and provides the same rule engine through a web workspace, HTTP API, and offline CLI.
 
+This is a feature-complete, proprietary portfolio project. The source is available for evaluation only; no reuse or redistribution license is granted.
+
 ## Why OASFuse
 
 - No database, uploads, external `$ref` fetching, analytics, or telemetry.
@@ -80,8 +82,8 @@ mvn -Pformat spotless:check
 mvn verify
 ```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for development conventions and [SECURITY.md](SECURITY.md) for the private vulnerability reporting policy.
+See [SECURITY.md](SECURITY.md) for the private vulnerability reporting policy.
 
-## License
+## Copyright
 
-No license has been selected yet. Until the repository owner explicitly chooses one, all rights are reserved.
+Copyright (c) 2026 Jhonata Nogueira. All rights reserved.
