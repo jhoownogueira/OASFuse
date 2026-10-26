@@ -1,0 +1,31 @@
+name: Deploy immutable images
+
+on:
+  workflow_dispatch:
+    inputs:
+      web_image:
+        description: Web image pinned as registry/name@sha256:digest
+        required: true
+      api_image:
+        description: API image pinned as registry/name@sha256:digest
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Validate immutable references
+        env:
+          WEB_IMAGE: ${{ inputs.web_image }}
+          API_IMAGE: ${{ inputs.api_image }}
+        run: |
+          case "$WEB_IMAGE:$API_IMAGE" in
+            *@sha256:*:@sha256:*) ;;
+            *) echo "Images must be pinned by digest" >&2; exit 64 ;;
+          esac
+      - name: Deployment handoff
+        run: echo "Run scripts/deploy.sh on the protected host with the validated digests."
