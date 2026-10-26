@@ -17,6 +17,6 @@ test("compares the bundled contracts through the real API", async ({
   await expect(page.getByText("Comparison results")).toBeVisible({
     timeout: 15_000,
   });
-  await expect(page.getByText("Response type changed")).toBeVisible();
-  await expect(page.getByText("Response property removed")).toBeVisible();
+  await expect(page.getByText("response.type.changed")).toBeVisible();
+  await expect(page.getByText("response.property.removed")).toBeVisible();
 });
