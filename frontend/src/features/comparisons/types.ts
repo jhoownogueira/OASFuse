@@ -25,7 +25,11 @@ export interface ComparisonReport {
   };
   findings: Finding[];
   warnings: string[];
-  metadata: { engineVersion: string; baselineOpenApiVersion: string; candidateOpenApiVersion: string };
+  metadata: {
+    engineVersion: string;
+    baselineOpenApiVersion: string;
+    candidateOpenApiVersion: string;
+  };
 }
 
 export interface ComparisonRequest {
@@ -34,4 +38,9 @@ export interface ComparisonRequest {
   options: { failOn: "breaking" | "review" | "never"; ignoreRules: string[] };
 }
 
-export interface ApiError { code: string; message: string; details?: { field: string; reason: string }[]; requestId?: string }
+export interface ApiError {
+  code: string;
+  message: string;
+  details?: { field: string; reason: string }[];
+  requestId?: string;
+}
