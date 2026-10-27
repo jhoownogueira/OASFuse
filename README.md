@@ -46,7 +46,7 @@ cp .env.example .env
 docker compose --env-file .env -f infra/compose.prod.yml up -d --build --remove-orphans
 ```
 
-Open `http://localhost:3200`, or the port selected through `WEB_PORT`. The production API remains private on the Compose network.
+Open `http://localhost:3200`, or the port selected through `FRONTEND_PORT`. `FRONTEND_BIND_ADDRESS` defaults to `0.0.0.0` so a containerized reverse proxy can reach the frontend through the host. The production API remains private on the Compose network.
 
 ## CLI
 

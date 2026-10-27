@@ -2,21 +2,21 @@
 
 ## Single-command VPS deployment
 
-Create the production environment file and choose the loopback port used by the host NGINX:
+Create the production environment file and choose the address and port used by the reverse proxy:
 
 ```sh
 cp .env.example .env
 ```
 
-The default is `WEB_PORT=3200`. Build and start both services with one command:
+The defaults are `FRONTEND_BIND_ADDRESS=0.0.0.0` and `FRONTEND_PORT=3200`. Build and start both services with one command:
 
 ```sh
 docker compose --env-file .env -f infra/compose.prod.yml up -d --build --remove-orphans
 ```
 
-The web service binds to `127.0.0.1:${WEB_PORT}`. The API remains private on the Compose network, and the Next.js BFF reaches it through `http://api:8080`.
+The web service binds to `${FRONTEND_BIND_ADDRESS}:${FRONTEND_PORT}`. The API remains private on the Compose network, and the Next.js BFF reaches it through `http://api:8080`.
 
-Point the host NGINX to `http://127.0.0.1:${WEB_PORT}`. Copy `infra/nginx/oasfuse.conf`, replace the example hostname and port when needed, and configure TLS.
+For Nginx Proxy Manager running in Docker, configure an HTTP upstream with the host address reachable from the NPM container, such as `172.17.0.1`, and `FRONTEND_PORT`. For NGINX installed directly on the host, use `127.0.0.1` and the same port. Restrict direct access to the frontend port with the host firewall, replace the example hostname in `infra/nginx/oasfuse.conf`, and configure TLS.
 
 ## Registry deployment
 
