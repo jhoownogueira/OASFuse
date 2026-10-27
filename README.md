@@ -4,6 +4,22 @@ OASFuse is a deterministic, stateless OpenAPI 3 comparison engine for release ga
 
 This is a feature-complete, proprietary portfolio project. The source is available for evaluation only; no reuse or redistribution license is granted.
 
+## Live demo
+
+[![OASFuse landing page](docs/assets/oasfuse-home.png)](https://oasfuse.jhonata.dev/)
+
+Explore the deployed application at [oasfuse.jhonata.dev](https://oasfuse.jhonata.dev/).
+
+## Product preview
+
+### Compare OpenAPI specifications
+
+![OASFuse comparison workspace with baseline and candidate OpenAPI specifications](docs/assets/oasfuse-comparison.png)
+
+### Review deterministic findings
+
+![OASFuse comparison results with severity summaries and finding details](docs/assets/oasfuse-results.png)
+
 ## Why OASFuse
 
 - No database, uploads, external `$ref` fetching, analytics, or telemetry.
