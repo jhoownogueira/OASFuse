@@ -42,10 +42,11 @@ Run the API separately with `cd backend && mvn -pl api -am quarkus:dev`. The web
 With containers:
 
 ```bash
-docker compose -f infra/compose.dev.yml up --build
+cp .env.example .env
+docker compose --env-file .env -f infra/compose.prod.yml up -d --build --remove-orphans
 ```
 
-Open `http://localhost:3200`. The API is also bound to loopback on port 8080 in development; production keeps it private.
+Open `http://localhost:3200`, or the port selected through `WEB_PORT`. The production API remains private on the Compose network.
 
 ## CLI
 
